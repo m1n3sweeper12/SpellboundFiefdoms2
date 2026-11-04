@@ -7,11 +7,11 @@ import objects.GameObject;
 public class Armor extends Item {
 	
 	public Armor(Item a) {
-		super(a.getBounds().x, a.getBounds().y, ITEM_TYPES.Armor, a.quantity, a.renderQuantity, a.name);
+		super(a.getParent(), a.getBounds().x, a.getBounds().y, ITEM_TYPES.Armor, a.quantity, a.renderQuantity, a.name);
 	}
 	
-	public Armor(int x, int y, int quantity, boolean renderQuantity, String name) {
-		super(x, y, ITEM_TYPES.Armor, quantity, renderQuantity, name);
+	public Armor(GameObject parent, int x, int y, int quantity, boolean renderQuantity, String name) {
+		super(parent, x, y, ITEM_TYPES.Armor, quantity, renderQuantity, name);
 	}
 	
 	@Override

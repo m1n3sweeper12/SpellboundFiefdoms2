@@ -44,7 +44,6 @@ public class Player extends GameObject {
 		
 		// BUG: for some reason, when both W & D are pressed, Key Event for E is not registering
 		if(KeyHandler.getKey(KeyEvent.VK_E)) { // use current item
-			System.out.println("got here");
 			if(canUseItem && power >= 10 && (xDir != 0 || yDir != 0)) {
 				if(currItem != null) {
 					currItem.useItem(this);

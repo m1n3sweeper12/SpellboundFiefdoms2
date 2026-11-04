@@ -111,6 +111,8 @@ public abstract class Hostile extends GameObject {
 		// set x and y to current position + direction*speed
 		this.setX(getX() + (int)(xDir*currSpeed));
 		this.setY(getY() + (int)(yDir*currSpeed));
+		currItem.setX(getCenterX());
+		currItem.setY(getCenterY());
 	}
 
 	@Override

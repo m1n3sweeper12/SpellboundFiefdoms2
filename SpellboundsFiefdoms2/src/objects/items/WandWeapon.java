@@ -8,8 +8,8 @@ import objects.attacks.SimpleAttack;
 
 public class WandWeapon extends Weapon {
 	
-	public WandWeapon(int x, int y, boolean renderQuantity) {
-		super(x, y, 1, renderQuantity, "Wand");
+	public WandWeapon(GameObject parent, int x, int y, boolean renderQuantity) {
+		super(parent, x, y, 1, renderQuantity, "Wand");
 	}
 	
 	@Override

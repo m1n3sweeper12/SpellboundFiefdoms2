@@ -212,7 +212,7 @@ public class Game extends State {
 			}
 			g.setColor(Colors.black);
 			g.fillRect(50, powStartY, 204, 29);
-			g.setColor(Colors.blue);
+			g.setColor(Colors.red);
 			g.fillRect(52, powStartY + 2, p.getPower()*2, 25);
 		}
 		

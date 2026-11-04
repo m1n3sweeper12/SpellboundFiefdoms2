@@ -8,11 +8,11 @@ import utils.Colors;
 public class Material extends Item {
 	
 	public Material(Item m) {
-		super(m.getBounds().x, m.getBounds().y, ITEM_TYPES.Material, m.quantity, m.renderQuantity, m.name);
+		super(m.getParent(), m.getBounds().x, m.getBounds().y, ITEM_TYPES.Material, m.quantity, m.renderQuantity, m.name);
 	}
 	
-	public Material(int x, int y, int quantity, boolean renderQuantity, String name) {
-		super(x, y, ITEM_TYPES.Material, quantity, renderQuantity, name);
+	public Material(GameObject parent, int x, int y, int quantity, boolean renderQuantity, String name) {
+		super(parent, x, y, ITEM_TYPES.Material, quantity, renderQuantity, name);
 	}
 	
 	@Override

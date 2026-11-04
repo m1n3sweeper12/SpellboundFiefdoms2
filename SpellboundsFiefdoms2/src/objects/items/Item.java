@@ -14,9 +14,11 @@ public abstract class Item extends GameObject {
 	protected String name;
 	protected boolean pickedUp;
 	protected ITEM_TYPES type;
+	protected GameObject parent;
 	
 	public Item(Item item) {
 		super(3, item.bounds.x, item.bounds.y, ObjectHandler.ITEM_SIZE, ObjectHandler.ITEM_SIZE, 0, 0, 0);
+		this.parent = item.parent;
 		this.type = item.type;
 		this.quantity = item.quantity;
 		this.renderQuantity = item.renderQuantity;
@@ -24,8 +26,9 @@ public abstract class Item extends GameObject {
 		pickedUp = false;
 	}
 	
-	public Item(int x, int y, ITEM_TYPES type, int quantity, boolean renderQuantity, String name) {
+	public Item(GameObject parent, int x, int y, ITEM_TYPES type, int quantity, boolean renderQuantity, String name) {
 		super(3, x, y, ObjectHandler.ITEM_SIZE, ObjectHandler.ITEM_SIZE, 0, 0, 0);
+		this.parent = parent;
 		this.type = type;
 		this.quantity = quantity;
 		this.renderQuantity = renderQuantity;
@@ -80,6 +83,14 @@ public abstract class Item extends GameObject {
 	
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public GameObject getParent() {
+		return parent;
+	}
+	
+	public void setParent(GameObject parent) {
+		this.parent = parent;
 	}
 	
 }

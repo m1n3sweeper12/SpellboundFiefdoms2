@@ -67,7 +67,7 @@ public class ObjectHandler {
 		hostiles.add(enemy1);
 		
 		// TEMP
-		WandWeapon wand = new WandWeapon(200, 200, true);
+		WandWeapon wand = new WandWeapon(null, 200, 200, true);
 		objects.add(wand);
 		items.add(wand);
 		weapons.add(wand);
@@ -87,21 +87,13 @@ public class ObjectHandler {
 			checkTileCollisions(m, o);
 		}
 		
-//		for(Weapon w : weapons) {
-//			Attack a = w.getAttack();
-//			if(!objects.contains(a) && a != null) objects.add(a);
-//			if(!attacks.contains(a) && a != null) attacks.add(a);
-//		}
-//		
-//		objects.removeIf(attack ->  attack.getID() == 4 && !attacks.contains(attack));
-//		attacks.removeIf(attack -> attack.getTime() <= 0);
-		
 		for(Item i : items) {
 			// check for player-item collisions
 			// add item to player inventory if inventory is not full
 			if(player.getBounds().intersects(i.getBounds())) {
 				if(player.getInventory().addItem(i)) {
 					i.setPickedUp(true);
+					i.setParent(player);
 					player.setHeldItem(i);
 				}
 			}
@@ -112,6 +104,7 @@ public class ObjectHandler {
 				if(h.getBounds().intersects(i.getBounds())) {
 					if(h.getInventory().addItem(i)) {
 						i.setPickedUp(true);
+						i.setParent(h);
 						h.setHeldItem(i);
 					}
 				}
@@ -132,9 +125,27 @@ public class ObjectHandler {
 			}
 		}
 		
+		// remove hostile from hostiles and objects lists if dead
+		hostiles.removeIf(h -> h.getHP() <= 0);
+		objects.removeIf(o -> o.getHP() <= 0 && o.getID() == 1); // don't remove player
+		
 		// remove item from objects and items lists if picked up
 		items.removeIf(i -> i != null && i.isPickedUp());
 		objects.removeIf(o -> o != null && o.getID() == 3 && ((Item)o).isPickedUp());
+		
+		// delete attacks if collides with object
+		for(Weapon w : weapons) {
+			for(GameObject o : objects) {
+				if(o.equals(w)) continue; // don't remove if object is weapon
+				if(o.equals(w.getParent())) continue; // don't remove if object is holding weapon
+				for(Attack a : w.getAttacks()) {
+					if(a.getBounds().intersects(o.getBounds())) {
+						o.hurt(a.getDamage());
+					}
+				}
+				w.getAttacks().removeIf(a -> a.getBounds().intersects(o.getBounds()));
+			}
+		}
 		
 		// update camera position
 		cam.tick(player, Main.screen_width, Main.screen_height);

@@ -11,11 +11,11 @@ public class Weapon extends Item {
 	protected ArrayList<Attack> attacks;
 	
 	public Weapon(Item w) {
-		super(w.getBounds().x, w.getBounds().y, ITEM_TYPES.Weapon, w.quantity, w.renderQuantity, w.name);
+		super(w.getParent(), w.getBounds().x, w.getBounds().y, ITEM_TYPES.Weapon, w.quantity, w.renderQuantity, w.name);
 	}
 	
-	public Weapon(int x, int y, int quantity, boolean renderQuantity, String name) {
-		super(x, y, ITEM_TYPES.Weapon, quantity, renderQuantity, name);
+	public Weapon(GameObject parent, int x, int y, int quantity, boolean renderQuantity, String name) {
+		super(parent, x, y, ITEM_TYPES.Weapon, quantity, renderQuantity, name);
 		// TODO: implement custom attack numbers
 		attacks = new ArrayList<Attack>(10);
 	}
@@ -25,11 +25,10 @@ public class Weapon extends Item {
 		for(Attack a : attacks) {
 			if(a != null) {
 				a.objectTick();
-				
-				if(a.getTime() <= 0)
-					a = null;
 			}
 		}
+		
+		attacks.removeIf(a -> a.getTime() <= 0);
 	}
 	
 	@Override

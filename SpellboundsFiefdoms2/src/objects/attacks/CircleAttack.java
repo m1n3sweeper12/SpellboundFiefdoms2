@@ -11,7 +11,7 @@ public class CircleAttack extends Attack {
 	protected int stroke;
 	
 	public CircleAttack(GameObject parent, int x, int y, int xDir, int yDir, int size, int stroke, int speed, int time) {
-		super(parent, x, y, xDir, yDir, ATTACK_TYPE.Circle, size, speed, time);
+		super(parent, 10, x, y, xDir, yDir, ATTACK_TYPE.Circle, size, speed, time);
 		this.stroke = stroke;
 	}
 

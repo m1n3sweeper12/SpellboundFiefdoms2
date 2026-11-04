@@ -7,7 +7,7 @@ import objects.GameObject;
 public class RangeAttack extends Attack {
 	
 	public RangeAttack(GameObject parent, int x, int y, int xDir, int yDir, int size, int speed, int time) {
-		super(parent, x, y, xDir, yDir, ATTACK_TYPE.Range, size, speed, time);
+		super(parent, 10, x, y, xDir, yDir, ATTACK_TYPE.Range, size, speed, time);
 	}
 
 	@Override
