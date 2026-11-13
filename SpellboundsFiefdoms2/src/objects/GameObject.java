@@ -19,7 +19,7 @@ public abstract class GameObject {
 	protected int id;
 	
 	// tracks object's health
-	protected int hp;
+	protected int hp, maxHP, healTimer, healInterval;
 	
 	// tracks the direction of movement
 	// will be very useful when sprites/animations are added
@@ -73,6 +73,9 @@ public abstract class GameObject {
 		
 		// set starting values for variables
 		this.hp = hp;
+		this.maxHP = hp;
+		this.healTimer = 50;
+		this.healInterval = 50;
 		this.speed = speed;
 		isRunning = false;
 		this.runStamina = runStamina;
@@ -87,13 +90,26 @@ public abstract class GameObject {
 	}
 	
 	public void tick() {
+		// handle hp healing
+		if(hp < maxHP) {
+			// if health is less than max, decrement heal timer
+			healTimer--;
+			// once heal timer reaches 0, increment hp, reset heal timer
+			if(healTimer <= 0) {
+				hp++;
+				healTimer = healInterval;
+			}
+		} else { // cap max hp
+			hp = maxHP;
+		}
+		
 		// stop running if stamina reaches 0
 		if(runStamina < 0) {
 			runStamina = 0;
 			canRun = false;
 		}
 		// stop incrementing stamina if stamina reaches max
-		if(runStamina >= maxRunStamina) {
+		if(runStamina > maxRunStamina) {
 			runStamina = maxRunStamina;
 		}
 		// set speed to running speed if running
@@ -118,6 +134,14 @@ public abstract class GameObject {
 	}
 	
 	public void render(Graphics2D g) {
+		
+		// render health bar above object if less than max hp
+		if(hp < maxHP && id != 0) {
+			g.setColor(Colors.black);
+			g.fillRect(getX() - 35, getY() - 27, 104, 24);
+			g.setColor(Colors.green);
+			g.fillRect(getX() - 35 + 2, getY() - 25, (int)((double)hp/(double)maxHP*100), 20);
+		}
 		
 		// TEMP
 		// draws oval over object when hurt

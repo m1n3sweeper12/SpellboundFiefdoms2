@@ -65,6 +65,7 @@ public class ObjectHandler {
 		enemy1 = new SimpleEnemy(900, 900);
 		objects.add(enemy1);
 		hostiles.add(enemy1);
+		weapons.add(enemy1.getWeapon());
 		
 		// TEMP
 		WandWeapon wand = new WandWeapon(null, 200, 200, true);

@@ -187,7 +187,7 @@ public class Game extends State {
 				stamStartY = 50;
 			}
 			g.setColor(Colors.black);
-			g.fillRect(50, stamStartY, 204, 29);
+			g.fillRect(50, stamStartY, 205, 29);
 			g.setColor(Colors.blue);
 			g.fillRect(52, stamStartY + 2, p.getRunStamina(), 25);
 			

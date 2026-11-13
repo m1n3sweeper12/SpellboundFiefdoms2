@@ -38,6 +38,14 @@ public class Weapon extends Item {
 		g.setColor(c.darker());
 		g.drawRect(bounds.x, bounds.y + bounds.height/4, bounds.width, bounds.height/4);
 		
+		if(attacks != null) {
+			for(Attack a : attacks) {
+				if(a != null) {
+					a.objectRender(g);
+				}
+			}
+		}
+		
 		this.drawQuantity(g);
 	}
 
