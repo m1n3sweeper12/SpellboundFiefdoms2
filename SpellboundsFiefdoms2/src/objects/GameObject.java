@@ -148,7 +148,7 @@ public abstract class GameObject {
 		if(hurtTimer > 0) {
 			hurtTimer--;
 			g.setColor(Colors.red);
-			g.drawOval(bounds.x, bounds.y, bounds.width, bounds.height);
+			g.fillOval(bounds.x, bounds.y, bounds.width, bounds.height);
 		} else {
 			hurtTimer = 0;
 		}

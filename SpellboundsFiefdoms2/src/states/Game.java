@@ -114,6 +114,14 @@ public class Game extends State {
 		////////
 		// UI //
 		////////
+
+		// render nighttime filter if it's night
+		if(Time.time != null) {
+			if(Time.time.equals("night") || Time.time.equals("early morning")) {
+				g.setColor(new Color(Colors.blue.getRed(), Colors.blue.getGreen(), Colors.blue.getBlue(), 100));
+				g.fillRect(0, 0, Main.screen_width, Main.screen_height);
+			}
+		}
 		
 		// render mini map
 		if(drawMiniMap)

@@ -86,6 +86,7 @@ public class Map {
 			// determine number of locks for map sections
 			int numSections = mapWidth*mapHeight;
 			boolean[] locks = new boolean[numSections];
+			int[] ids = new int[numSections];
 			
 			// get locks for each section
 			for(int i = 0; i < locks.length; i++) {
@@ -95,6 +96,12 @@ public class Map {
 				} else {
 					locks[i] = true;
 				}
+			}
+			
+			// get ids for each section
+			for(int i = 0; i < ids.length; i++) {
+				int id = in.nextInt();
+				ids[i] = id;
 			}
 			
 			// get section width and height (in tiles)
@@ -108,7 +115,7 @@ public class Map {
 			// loop through every section in map
 			for(int y = 0; y < mapHeight; y++) {
 				for(int x = 0; x < mapWidth; x++) {
-					MapSection temp = new MapSection();
+					MapSection temp = new MapSection(ids[index]);
 					// set values for position
 					temp.setX(x);
 					temp.setY(y);

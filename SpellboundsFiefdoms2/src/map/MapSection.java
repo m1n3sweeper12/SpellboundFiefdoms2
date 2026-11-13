@@ -13,9 +13,11 @@ public class MapSection {
 	private int x, y;
 	private boolean locked;
 	private Rectangle bounds;
+	private int id;
 	
-	public MapSection() {
+	public MapSection(int id) {
 		tiles = new ArrayList<Tile>();
+		this.id = id;
 		x = 0;
 		y = 0;
 		//locked = false;
@@ -82,6 +84,14 @@ public class MapSection {
 	
 	public ArrayList<Tile> getTiles() {
 		return tiles;
+	}
+	
+	public int getID() {
+		return id;
+	}
+	
+	public void setID(int id) {
+		this.id = id;
 	}
 	
 }
