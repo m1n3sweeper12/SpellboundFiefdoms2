@@ -243,7 +243,6 @@ public class ObjectHandler {
 						break;
 					}
 					
-					player.getInventory().addItem(i);
 					objects.add(i);
 					items.add(i);
 				}
@@ -268,6 +267,7 @@ public class ObjectHandler {
 		save += player.getCurrSlot() + "\n";
 		// add info for each player item
 		for(Item i : player.getInventory().getItems()) {
+			System.out.println("got here");
 			if(i == null) {
 				continue;
 			}
@@ -278,6 +278,7 @@ public class ObjectHandler {
 			temp += i.getQuantity() + " ";
 			temp += i.isRenderingQuantity() + " ";
 			temp += i.getName() + "\n";
+			System.out.println(temp);
 			save += temp;
 		}
 		

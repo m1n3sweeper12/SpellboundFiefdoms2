@@ -1,7 +1,6 @@
-2052 312
-165
-100
-2
-2076 336 WandWeapon 1 true Wand
-1894 1048 Weapon 1 true Test Weapon
-2076 336 WandWeapon 1 true Wand
+1754 1052
+200
+98
+1
+306 220 WandWeapon 1 true Wand
+1778 1076 WandWeapon 1 true Wand
