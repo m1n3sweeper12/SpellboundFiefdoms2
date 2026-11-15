@@ -5,6 +5,7 @@ package objects.items;
 // logic with item handling
 
 public enum ITEM_TYPES {
+	WandWeapon(),
 	Weapon(),
 	Armor(),
 	Material();

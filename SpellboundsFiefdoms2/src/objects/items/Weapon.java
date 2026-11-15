@@ -2,9 +2,11 @@ package objects.items;
 
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.Random;
 
 import objects.GameObject;
 import objects.attacks.Attack;
+import objects.attacks.SimpleAttack;
 
 public class Weapon extends Item {
 	
@@ -51,7 +53,8 @@ public class Weapon extends Item {
 
 	@Override
 	public void useItem(GameObject parent) {
-		
+		Random r = new Random();
+		attacks.add(new SimpleAttack(this, r.nextInt(2, 10), getX(), getY(), 0, 0, bounds.width, 0, 50));
 	}
 	
 	public ArrayList<Attack> getAttacks() {

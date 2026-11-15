@@ -2,15 +2,20 @@ package objects.hostiles;
 
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.util.ArrayList;
 import java.util.Random;
 
 import objects.GameObject;
 import objects.ObjectHandler;
+import objects.attacks.Attack;
 import objects.items.Inventory;
 import objects.items.Item;
+import objects.items.Weapon;
 
 public abstract class Hostile extends GameObject {
 	
+	// array list to store items dropped by enemy
+	protected ArrayList<Item> drops;
 	protected Inventory inventory;
 	protected Item currItem;
 	protected Rectangle roamBoundary;
@@ -21,7 +26,9 @@ public abstract class Hostile extends GameObject {
 	protected String state;
 	// variables to track min/max damage of attacks
 	protected int minPower, maxPower;
-	
+	protected Attack baseAttack;
+	protected Weapon weapon;
+		
 	public Hostile(int x, int y, int hp, int speed, int roamSize, int minPower, int maxPower, int attackTime) {
 		super(1, x, y, ObjectHandler.OBJ_SIZE, ObjectHandler.OBJ_SIZE, hp, speed, 100);
 		// Hostile objects can only hold 1 item at a time
@@ -34,6 +41,8 @@ public abstract class Hostile extends GameObject {
 		state = "roam";
 		this.minPower = minPower;
 		this.maxPower = maxPower;
+		//weapon = new Weapon(this, getCenterX(), getCenterY(), 1, false, "EnemyWeapon");
+		//inventory.addItem(weapon);
 	}
 	
 	public void chase(GameObject o) {
@@ -111,8 +120,10 @@ public abstract class Hostile extends GameObject {
 		// set x and y to current position + direction*speed
 		this.setX(getX() + (int)(xDir*currSpeed));
 		this.setY(getY() + (int)(yDir*currSpeed));
-		currItem.setX(getCenterX());
-		currItem.setY(getCenterY());
+		if(currItem != null) {
+			currItem.setX(getCenterX());
+			currItem.setY(getCenterY());
+		}
 	}
 
 	@Override
@@ -133,6 +144,18 @@ public abstract class Hostile extends GameObject {
 	
 	public void setState(String state) {
 		this.state = state;
+	}
+	
+	public Weapon getWeapon() {
+		return weapon;
+	}
+	
+	public Attack getBaseAttack() {
+		return baseAttack;
+	}
+	
+	public void setBaseAttack(Attack baseAttack) {
+		this.baseAttack = baseAttack;
 	}
 	
 }

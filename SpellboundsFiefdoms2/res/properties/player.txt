@@ -1,0 +1,7 @@
+2052 312
+165
+100
+2
+2076 336 WandWeapon 1 true Wand
+1894 1048 Weapon 1 true Test Weapon
+2076 336 WandWeapon 1 true Wand

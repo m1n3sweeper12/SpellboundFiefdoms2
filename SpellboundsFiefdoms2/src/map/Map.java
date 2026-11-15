@@ -17,6 +17,7 @@ public class Map {
 	public static int mapWidth, mapHeight;
 	public static int sectionWidth, sectionHeight;
 	public static final int TILE_SIZE = 48;
+	public static Rectangle mapBounds;
 	
 	public Map() {
 		sections = new ArrayList<MapSection>();
@@ -123,6 +124,8 @@ public class Map {
 					temp.setLocked(locks[index]);
 					temp.setBounds(new Rectangle(x*Map.sectionWidth*Map.TILE_SIZE,
 							y*Map.sectionHeight*Map.TILE_SIZE, sectionWidth*TILE_SIZE, sectionHeight*TILE_SIZE));
+					temp.setSpawnBounds(new Rectangle(x*Map.sectionWidth*Map.TILE_SIZE + 10,
+							y*Map.sectionHeight*Map.TILE_SIZE + 10, sectionWidth*TILE_SIZE - 20, sectionHeight*TILE_SIZE - 20));
 					// loop through every tile in section array
 					for(int yy = 0; yy < sectionHeight; yy++) {
 						for(int xx = 0; xx < sectionWidth; xx++) {
@@ -153,6 +156,8 @@ public class Map {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+		
+		mapBounds = new Rectangle(0, 0, mapWidth*sectionWidth*TILE_SIZE, mapHeight*sectionHeight*TILE_SIZE);
 	}
 	
 	public ArrayList<MapSection> getSections() {

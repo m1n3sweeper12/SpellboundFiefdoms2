@@ -77,6 +77,10 @@ public abstract class Item extends GameObject {
 		this.quantity = quantity;
 	}
 	
+	public boolean isRenderingQuantity() {
+		return renderQuantity;
+	}
+	
 	public String getName() {
 		return name;
 	}

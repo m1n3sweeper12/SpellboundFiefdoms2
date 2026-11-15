@@ -8,8 +8,14 @@ import objects.attacks.SimpleAttack;
 
 public class WandWeapon extends Weapon {
 	
+	public WandWeapon(Item i) {
+		super(i);
+		this.setType(ITEM_TYPES.WandWeapon);
+	}
+	
 	public WandWeapon(GameObject parent, int x, int y, boolean renderQuantity) {
 		super(parent, x, y, 1, renderQuantity, "Wand");
+		this.setType(ITEM_TYPES.WandWeapon);
 	}
 	
 	@Override
@@ -21,14 +27,16 @@ public class WandWeapon extends Weapon {
 		
 		this.drawQuantity(g);
 		
-		for(Attack a : attacks) {
-			a.objectRender(g);
+		if(attacks != null) {
+			for(Attack a : attacks) {
+				a.objectRender(g);
+			}
 		}
 	}
 	
 	@Override
 	public void useItem(GameObject parent) {
-		attacks.add(new SimpleAttack(this, getCenterX(), getCenterY(), parent.getXDir(), parent.getYDir(), 10, 4, 50));
+		attacks.add(new SimpleAttack(this, 10, getCenterX(), getCenterY(), parent.getXDir(), parent.getYDir(), 10, 4, 50));
 	}
 
 }

@@ -91,7 +91,9 @@ public abstract class GameObject {
 	
 	public void tick() {
 		// handle hp healing
-		if(hp < maxHP) {
+		if(hp < 0) {
+			hp = 0;
+		} else if(hp < maxHP) {
 			// if health is less than max, decrement heal timer
 			healTimer--;
 			// once heal timer reaches 0, increment hp, reset heal timer

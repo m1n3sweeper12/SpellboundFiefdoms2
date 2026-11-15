@@ -17,6 +17,7 @@ import objects.Player;
 import objects.items.Armor;
 import objects.items.Item;
 import objects.items.Material;
+import objects.items.WandWeapon;
 import objects.items.Weapon;
 import utils.Colors;
 
@@ -30,7 +31,7 @@ public class Game extends State {
 	private MapHandler mapHandler;
 	
 	// object handler instance to load objects
-	private ObjectHandler objectHandler;
+	private static ObjectHandler objectHandler;
 	
 	public static boolean debugging, canToggleDebug, drawMiniMap, canToggleMiniMap;
 	
@@ -130,8 +131,10 @@ public class Game extends State {
 		// render time
 		g.setColor(Colors.white);
 		g.setFont(new Font("monospaced", Font.BOLD, 28));
-		g.drawString("Day " + Time.day, main.getWidth() - 100, 30);
-		g.drawString(String.format("%d:%02d", Time.hour, Time.minute), main.getWidth() - 100, 60);
+		g.drawString("Day " + Time.day, main.getWidth() - 250, 30);
+		g.drawString(String.format("%d:%02d", Time.hour, Time.minute), main.getWidth() - 250, 60);
+		if(Time.time != null)
+			g.drawString(Time.time, main.getWidth() - 250, 90);
 		
 		// get player object to render player stats
 		Player p = null;
@@ -149,7 +152,8 @@ public class Game extends State {
 				g.setColor(Colors.black);
 				g.fillRect(startX + Map.TILE_SIZE*i - 2, main.getHeight() - 102, Map.TILE_SIZE + 4, Map.TILE_SIZE + 4);
 				// draw slot boxes
-				g.setColor(Colors.blue.brighter());
+				g.setColor(new Color(Colors.blue.brighter().getRed(), Colors.blue.brighter().getGreen(), 
+						Colors.blue.brighter().getBlue(), 128));
 				g.fillRect(startX + Map.TILE_SIZE*i + 2, main.getHeight() - 98, Map.TILE_SIZE - 4, Map.TILE_SIZE - 4);
 				// draw items
 				Item item = null;
@@ -164,6 +168,8 @@ public class Game extends State {
 					case Weapon:
 						item = new Weapon(p.getInventory().getItem(i));
 						break;
+					case WandWeapon:
+						item = new WandWeapon(p.getInventory().getItem(i));
 					}
 				}
 				if(item != null) { // only draw item if not null
@@ -180,10 +186,10 @@ public class Game extends State {
 			g.setStroke(new BasicStroke(1));
 			
 			// draw current item name
-			if(p.getCurrItem() != null) {
+			if(p.getHeldItem() != null) {
 				g.setColor(Colors.white);
 				g.setFont(new Font("Monospaced", Font.BOLD, 14));
-				String name = p.getCurrItem().getName();
+				String name = p.getHeldItem().getName();
 				g.drawString(name, main.getWidth()/2 - g.getFontMetrics().stringWidth(name)/2, main.getHeight() - 125);
 			}
 			
@@ -234,6 +240,7 @@ public class Game extends State {
 	
 	public static void save() {
 		Time.writeTimeToFile("res/properties/time.txt");
+		objectHandler.savePlayer();
 	}
 	
 }

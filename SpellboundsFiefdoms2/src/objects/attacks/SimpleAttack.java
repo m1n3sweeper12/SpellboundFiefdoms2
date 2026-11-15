@@ -6,8 +6,8 @@ import objects.GameObject;
 
 public class SimpleAttack extends Attack {
 
-	public SimpleAttack(GameObject parent, int x, int y, int xDir, int yDir, int size, int speed, int time) {
-		super(parent, 10, x, y, xDir, yDir, ATTACK_TYPE.Simple, size, speed, time);
+	public SimpleAttack(GameObject parent, int damage, int x, int y, int xDir, int yDir, int size, int speed, int time) {
+		super(parent, damage, x, y, xDir, yDir, ATTACK_TYPE.Simple, size, speed, time);
 	}
 
 	@Override

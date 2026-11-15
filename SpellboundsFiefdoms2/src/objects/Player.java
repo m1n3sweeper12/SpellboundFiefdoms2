@@ -1,31 +1,34 @@
 package objects;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 
 import input.KeyHandler;
 import map.Map;
 import objects.items.Inventory;
-import objects.items.Item;
 import states.Game;
 
 public class Player extends GameObject {
 	
 	private Inventory inventory;
-	private Item currItem; // holds currently selected item
 	private int currSlot; // tracks index of current item
 	private boolean canMoveSlot, canUseItem; // tracks key press for moving current slot
 	private int power, powerIncTimer; // controls how much a player can use an item
+	private Rectangle roamBoundary;
 	
 	public Player(int x, int y) {
 		super(0, x, y, Map.TILE_SIZE, Map.TILE_SIZE, 200, 2, 200);
 		inventory = new Inventory(10);
-		currItem = null;
+		heldItem = null;
 		currSlot = 0;
 		canMoveSlot = true;
 		canUseItem = true;
 		power = 100;
 		powerIncTimer = 10;
+		roamBoundary = new Rectangle(getCenterX() - Map.TILE_SIZE, getCenterY() - Map.TILE_SIZE,
+				Map.TILE_SIZE*3, Map.TILE_SIZE*3);
 	}
 	
 	@Override
@@ -42,11 +45,15 @@ public class Player extends GameObject {
 		if(power > 100) power = 100;
 		if(power < 0) power = 0;
 		
+		if(KeyHandler.getKey(KeyEvent.VK_P)) {
+			Game.save();
+		}
+		
 		// BUG: for some reason, when both W & D are pressed, Key Event for E is not registering
 		if(KeyHandler.getKey(KeyEvent.VK_E)) { // use current item
 			if(canUseItem && power >= 10 && (xDir != 0 || yDir != 0)) {
-				if(currItem != null) {
-					currItem.useItem(this);
+				if(heldItem != null) {
+					heldItem.useItem(this);
 					power -= 10;
 				}
 				canUseItem = false;
@@ -106,10 +113,17 @@ public class Player extends GameObject {
 		} else {
 			canMoveSlot = true;
 		}
-		currItem = inventory.getItem(currSlot);
-		if(currItem != null) { // tick current item
-			currItem.objectTick();
+		heldItem = inventory.getItem(currSlot);
+		if(heldItem != null) {
+			heldItem.setX(getCenterX());
+			heldItem.setY(getCenterY());
 		}
+		if(heldItem != null) { // tick current item
+			heldItem.objectTick();
+		}
+		
+		roamBoundary.x = getX() - Map.TILE_SIZE;
+		roamBoundary.y = getY() - Map.TILE_SIZE;
 	}
 	
 	@Override
@@ -121,6 +135,11 @@ public class Player extends GameObject {
 		g.draw(bounds);
 		// draw currently held item
 		this.drawHeldItem(g);
+		
+		if(Game.debugging) {
+			g.setColor(Color.black);
+			g.draw(roamBoundary);
+		}
 	}
 	
 	public Inventory getInventory() {
@@ -131,8 +150,8 @@ public class Player extends GameObject {
 		return currSlot;
 	}
 	
-	public Item getCurrItem() {
-		return currItem;
+	public void setCurrSlot(int currSlot) {
+		this.currSlot = currSlot;
 	}
 	
 	public int getPower() {
@@ -141,6 +160,10 @@ public class Player extends GameObject {
 	
 	public void setPower(int power) {
 		this.power = power;
+	}
+	
+	public Rectangle getRoamBoundary() {
+		return roamBoundary;
 	}
 
 }
