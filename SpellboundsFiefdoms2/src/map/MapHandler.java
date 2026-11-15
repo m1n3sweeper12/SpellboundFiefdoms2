@@ -10,7 +10,7 @@ public class MapHandler {
 	public MapHandler() {
 		// TEMP, initialize test map
 		test = new Map();
-		test.loadMap("test-map-3");
+		test.loadMap("test-map-1");
 		
 		currMap = test;
 	}

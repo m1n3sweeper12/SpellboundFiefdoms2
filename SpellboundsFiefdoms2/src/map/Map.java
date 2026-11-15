@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 import objects.GameObject;
@@ -135,7 +136,7 @@ public class Map {
 			// loop through map and instantiate each map section
 			for(int y = 0; y < mapHeight; y++) {
 				for(int x = 0; x < mapWidth; x++) {
-					int index = y*mapHeight + x;
+					int index = y*mapWidth + x;
 					MapSection section = new MapSection(ids[index]);
 					section.setX(x);
 					section.setY(y);
@@ -166,7 +167,7 @@ public class Map {
 			for(int y = 0; y < mapHeight; y++) {
 				for(int yy = 0; yy < sectionHeight; yy++) {
 					for(int x = 0; x < mapWidth; x++) {
-						MapSection curr = sections.get(y*mapHeight + x);
+						MapSection curr = sections.get(y*mapWidth + x);
 						for(int xx = 0; xx < sectionWidth; xx++) {
 							// get tile id
 							int tileID = in.nextInt();

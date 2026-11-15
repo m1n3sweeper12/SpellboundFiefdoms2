@@ -21,7 +21,7 @@ public abstract class Structure {
 		this.extHeight = extHeight;
 		exterior = new StructTile[extWidth*extHeight];
 		interior = new Map();
-		interior.loadMap(intPath);
+		//interior.loadMap(intPath);
 	}
 	
 	public abstract void tick();
