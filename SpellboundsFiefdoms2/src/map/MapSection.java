@@ -22,6 +22,7 @@ public class MapSection {
 	// variable to track type of section
 	// 0 -> default, nothing
 	// 1 -> enemy spawning area
+	// 2 -> market
 	private int id;
 	private boolean active = false;
 	
@@ -81,6 +82,9 @@ public class MapSection {
 				break;
 			case 1:
 				g.setColor(Color.red); // enemy spawning
+				break;
+			case 2:
+				g.setColor(Color.blue); // market
 				break;
 			}
 			g.setStroke(new BasicStroke(4));

@@ -13,6 +13,8 @@ import java.util.Scanner;
 import core.Main;
 import map.Map;
 import map.MapSection;
+import map.StructTile;
+import map.Structure;
 import map.Tile;
 import objects.attacks.Attack;
 import objects.hostiles.Hostile;
@@ -267,7 +269,6 @@ public class ObjectHandler {
 		save += player.getCurrSlot() + "\n";
 		// add info for each player item
 		for(Item i : player.getInventory().getItems()) {
-			System.out.println("got here");
 			if(i == null) {
 				continue;
 			}
@@ -292,6 +293,7 @@ public class ObjectHandler {
 	// handle tile-object collisions
 	private void checkTileCollisions(Map m, GameObject o) {
 		
+		// check base tile collisions
 		for(MapSection s : m.getSections()) {
 			// if section is locked, set positions to edge of section
 			if(s.isLocked()) {
@@ -312,6 +314,34 @@ public class ObjectHandler {
 			
 			for(Tile t : s.getTiles()) {
 				if(t.isSolid()) { // if tile is solid, set positions to edge of tile
+					if(o.getTopBounds().intersects(t.getBounds())) {
+						o.setY(t.getBounds().y + t.getBounds().height);
+					}
+					if(o.getBottomBounds().intersects(t.getBounds())) {
+						o.setY(t.getBounds().y - o.getBounds().height);
+					}
+					if(o.getLeftBounds().intersects(t.getBounds())) {
+						o.setX(t.getBounds().x + t.getBounds().width);
+					}
+					if(o.getRightBounds().intersects(t.getBounds())) {
+						o.setX(t.getBounds().x - o.getBounds().width);
+					}
+				}
+			}
+		}
+		
+		// check structure tile collisions
+		for(Structure s : m.getStructures()) {
+			for(StructTile t : s.getExterior()) {
+				if(t == null) continue;
+				// if tile is a door, 
+				if(t.getType() == 2) {
+					if(o.getID() == 0 && o.getBounds().intersects(t.getBounds())) {
+						System.out.println("TODO: add interiors to structures");
+					}
+				}
+				if(t.isSolid()) { // if tile is solid, set positions to edge of tile
+					
 					if(o.getTopBounds().intersects(t.getBounds())) {
 						o.setY(t.getBounds().y + t.getBounds().height);
 					}

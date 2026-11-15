@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -14,6 +15,7 @@ import utils.Colors;
 public class Map {
 	
 	private ArrayList<MapSection> sections;
+	private ArrayList<Structure> structures;
 	public static int mapWidth, mapHeight;
 	public static int sectionWidth, sectionHeight;
 	public static final int TILE_SIZE = 48;
@@ -21,18 +23,29 @@ public class Map {
 	
 	public Map() {
 		sections = new ArrayList<MapSection>();
+		structures = new ArrayList<Structure>();
 	}
 	
 	public void tick() {
 		// TODO: optimize map section updating
+		// tick map sections
 		for(MapSection s : sections) {
+			s.tick();
+		}
+		// tick structures
+		for(Structure s : structures) {
 			s.tick();
 		}
 	}
 	
 	public void render(Graphics2D g) {
 		// TODO: optimize map section rendering
+		// render map sections
 		for(MapSection s : sections) {
+			s.render(g);
+		}
+		// render structures
+		for(Structure s : structures) {
 			s.render(g);
 		}
 	}
@@ -75,11 +88,21 @@ public class Map {
 	}
 	
 	// method to load map from file
-	public void loadMap(String path) {
-		// load data from map file into string
+	public void loadMap(String name) {
+		String tilePath = "res/maps/" + name + "-tiles.txt";
+		String structPath = "res/maps/" + name + "-structs.txt";
+		
+		loadTiles(tilePath);
+		loadStructures(structPath);
+		
+		mapBounds = new Rectangle(0, 0, mapWidth*sectionWidth*TILE_SIZE, mapHeight*sectionHeight*TILE_SIZE);
+	}
+	
+	private void loadTiles(String tilePath) {
+		// load data from map file
 		Scanner in;
 		try {
-			in = new Scanner(new File(path));
+			in = new Scanner(new File(tilePath));
 			// get map width and height (in map sections)
 			mapWidth = in.nextInt();
 			mapHeight = in.nextInt();
@@ -109,25 +132,41 @@ public class Map {
 			sectionWidth = in.nextInt();
 			sectionHeight = in.nextInt();
 			
-			// fill sections
-			// index variable to track locked sections
-			int index = 0;
-			
-			// loop through every section in map
+			// loop through map and instantiate each map section
 			for(int y = 0; y < mapHeight; y++) {
 				for(int x = 0; x < mapWidth; x++) {
-					MapSection temp = new MapSection(ids[index]);
-					// set values for position
-					temp.setX(x);
-					temp.setY(y);
-					// set locked section
-					temp.setLocked(locks[index]);
-					temp.setBounds(new Rectangle(x*Map.sectionWidth*Map.TILE_SIZE,
+					int index = y*mapHeight + x;
+					MapSection section = new MapSection(ids[index]);
+					section.setX(x);
+					section.setY(y);
+					section.setLocked(locks[index]);
+					section.setBounds(new Rectangle(x*Map.sectionWidth*Map.TILE_SIZE,
 							y*Map.sectionHeight*Map.TILE_SIZE, sectionWidth*TILE_SIZE, sectionHeight*TILE_SIZE));
-					temp.setSpawnBounds(new Rectangle(x*Map.sectionWidth*Map.TILE_SIZE + 10,
-							y*Map.sectionHeight*Map.TILE_SIZE + 10, sectionWidth*TILE_SIZE - 20, sectionHeight*TILE_SIZE - 20));
-					// loop through every tile in section array
-					for(int yy = 0; yy < sectionHeight; yy++) {
+					section.setSpawnBounds(new Rectangle(x*Map.sectionWidth*Map.TILE_SIZE + 10,
+							y*Map.sectionHeight*Map.TILE_SIZE + 10, sectionWidth*TILE_SIZE - 20,
+							sectionHeight*TILE_SIZE - 20));
+					sections.add(section);
+				}
+			}
+			
+			// fill sections
+			/*
+			 * This section is very confusing at first.
+			 * The idea is to simplify map file creation,
+			 * compared to just looping through the sections directly.
+			 * The y variable represents the y value of the current section.
+			 * The x variable represents the x value of the current section.
+			 * The yy variable represents the y value of the current tile.
+			 * The xx variable represents the x value of the current tile.
+			 * These values can then be used to get the correct coordinate location of the current tile id.
+			 * The id is then used to add the correct tile at that coordinate to that map section.
+			 * Once more complex tile ids are created, this section could get very messy, and will
+			 * likely have to be broken into multiple functions.
+			 */
+			for(int y = 0; y < mapHeight; y++) {
+				for(int yy = 0; yy < sectionHeight; yy++) {
+					for(int x = 0; x < mapWidth; x++) {
+						MapSection curr = sections.get(y*mapHeight + x);
 						for(int xx = 0; xx < sectionWidth; xx++) {
 							// get tile id
 							int tileID = in.nextInt();
@@ -137,31 +176,99 @@ public class Map {
 							// depending on tile ID, initialize proper tile
 							switch(tileID) {
 							case 0: // TEMP, not solid
-								temp.getTiles().add(new Tile(tileX*TILE_SIZE, tileY*TILE_SIZE, TILE_SIZE, TILE_SIZE,
+								curr.getTiles().add(new Tile(tileX*TILE_SIZE, tileY*TILE_SIZE, TILE_SIZE, TILE_SIZE,
 										false, null, Colors.green));
 								break;
 							case 1: // TEMP, solid
-								temp.getTiles().add(new Tile(tileX*TILE_SIZE, tileY*TILE_SIZE, TILE_SIZE, TILE_SIZE,
-										true, null, Colors.blue));
+								curr.getTiles().add(new Tile(tileX*TILE_SIZE, tileY*TILE_SIZE, TILE_SIZE, TILE_SIZE,
+										true, null, Colors.black.brighter().brighter()));
+								break;
+							case 2: // TEMP, path tile, not solid
+								curr.getTiles().add(new Tile(tileX*TILE_SIZE, tileY*TILE_SIZE, TILE_SIZE, TILE_SIZE,
+										false, null, Colors.red.darker().darker()));
 								break;
 							}
 						}
 					}
-					// increment lock index
-					index++;
-					// add section to array list
-					sections.add(temp);
 				}
 			}
+			
+			in.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		
-		mapBounds = new Rectangle(0, 0, mapWidth*sectionWidth*TILE_SIZE, mapHeight*sectionHeight*TILE_SIZE);
+	}
+	
+	private void loadStructures(String structPath) {
+		// load data from structure file
+		Scanner in;
+		try {
+			in = new Scanner(new File(structPath));
+			
+			// get the number of structures to load
+			int numStructs = in.nextInt();
+			
+			// loop through each structure
+			for(int i = 0; i < numStructs; i++) {
+				// get structure info
+				int x = in.nextInt();
+				int y = in.nextInt();
+				int width = in.nextInt();
+				int height = in.nextInt();
+				int type = in.nextInt();
+				
+				// create structure
+				Structure s = null;
+				
+				switch(type) {
+				case 0: // house
+					// TODO: add interiors to structures
+					s = new House(x, y, width, height, "");
+					break;
+				}
+				
+				// load structure tiles
+				for(int yy = 0; yy < height; yy++) {
+					for(int xx = 0; xx < width; xx++) {
+						int tileX = (x + xx)*TILE_SIZE;
+						int tileY = (y + yy)*TILE_SIZE;
+						int tileID = in.nextInt();
+						
+						switch(tileID) {
+						case 0: // empty
+							break;
+						case 1: // wall tile
+							s.exterior[yy*width + xx] = new StructTile(1, tileX, tileY, TILE_SIZE, TILE_SIZE,
+									true, null, Colors.orange);
+							break;
+						case 2: // door
+							s.exterior[yy*width + xx] = new Door(tileX, tileY, TILE_SIZE, TILE_SIZE,
+									false, null, Colors.yellow);
+							break;
+						case 3: // window
+							s.exterior[yy*width + xx] = new StructTile(1, tileX, tileY, TILE_SIZE, TILE_SIZE,
+									true, null, Colors.black);
+						}
+						
+						
+					}
+				}
+				
+				structures.add(s);
+			}
+			
+			in.close();
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public ArrayList<MapSection> getSections() {
 		return sections;
+	}
+	
+	public ArrayList<Structure> getStructures() {
+		return structures;
 	}
 	
 }

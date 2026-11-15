@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
 public class Tile {
 	
 	// rectangle to track collisions
-	private Rectangle bounds;
+	protected Rectangle bounds;
 	// boolean for if tile is solid
 	private boolean solid;
 	// image to draw for tile
