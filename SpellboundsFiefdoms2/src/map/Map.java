@@ -90,8 +90,8 @@ public class Map {
 	
 	// method to load map from file
 	public void loadMap(String name) {
-		String tilePath = "res/maps/" + name + "-tiles.txt";
-		String structPath = "res/maps/" + name + "-structs.txt";
+		String tilePath = "res/maps/" + name + "/tiles.txt";
+		String structPath = "res/maps/" + name + "/structs.txt";
 		
 		loadTiles(tilePath);
 		loadStructures(structPath);
