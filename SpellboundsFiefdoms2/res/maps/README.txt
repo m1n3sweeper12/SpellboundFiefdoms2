@@ -1,7 +1,8 @@
 Map File System Explanation
 
+Each map has its own folder. In each folder, there is a "tiles" file, a "structs" file.
 
-"-tiles" files are used to load tilemaps.
+"tiles" files are used to load tilemaps.
 The first line represents the width and height of the map, in map sections.
 The next section represents the lock boolean values for each section. 0 is unlocked, 1 is locked.
 The third section represents the map section id for each map section.
@@ -9,7 +10,7 @@ The third section represents the map section id for each map section.
 The fourth line represents the width and height of each section, in tiles.
 The fifth line begins the sections data, with an array of tile ids for each tile in each section.
 
-"-structs" files are used to load structures.
+"structs" files are used to load structures.
 The first line represents the number of structures to be loaded.
 Each section after that represents a different structure.
 

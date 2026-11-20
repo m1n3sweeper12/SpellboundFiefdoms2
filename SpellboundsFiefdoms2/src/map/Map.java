@@ -1,16 +1,17 @@
 package map;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 import objects.GameObject;
 import objects.ObjectHandler;
+import states.Game;
 import utils.Colors;
 
 public class Map {
@@ -54,8 +55,17 @@ public class Map {
 	public void renderMiniMap(Graphics2D g, ObjectHandler oh) {
 		// top-left corner of mini map
 		int miniStartX = 50;
-		int miniStartY = 50;
-		int scale = 3;
+		int miniStartY = 170;
+		int scale = 1;
+		
+		if(mapWidth <= 5 && mapHeight <= 5) {
+			scale = 3;
+		} else if(mapWidth <= 10 && mapHeight <= 10) {
+			scale = 2;
+		} else {
+			scale = 1;
+		}
+		
 		// draw background
 		g.setColor(Colors.black);
 		g.fillRect(miniStartX - scale, miniStartY - scale,
@@ -77,6 +87,24 @@ public class Map {
 					int y = t.getBounds().y/Map.TILE_SIZE;
 					g.fillRect(miniStartX + x*scale, miniStartY + y*scale, scale, scale);
 				}
+			}
+			
+			// if debugging, draw section type grid
+			if(Game.debugging) {
+				switch(s.getID()) {
+				case 0:
+					g.setColor(Color.black);
+					break;
+				case 1:
+					g.setColor(Color.red);
+					break;
+				case 2:
+					g.setColor(Color.blue);
+					break;
+				}
+				
+				g.drawRect(miniStartX + s.getX()*sectionWidth*scale, miniStartY + s.getY()*sectionHeight*scale,
+						Map.sectionWidth*scale, Map.sectionHeight*scale);
 			}
 		}
 		

@@ -1,5 +1,5 @@
-3470 3874
+3426 2590
 200
 100
 0
-3494 3898 WandWeapon 1 true Wand
+3450 2614 WandWeapon 1 true Wand

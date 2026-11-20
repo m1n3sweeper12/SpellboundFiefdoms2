@@ -194,36 +194,21 @@ public class Game extends State {
 			}
 			
 			// draw stamina bar
-			int stamStartY = 0;
-			if(drawMiniMap) {
-				stamStartY = 150;
-			} else {
-				stamStartY = 50;
-			}
+			int stamStartY = 25;
 			g.setColor(Colors.black);
-			g.fillRect(50, stamStartY, 205, 29);
+			g.fillRect(50, stamStartY, 204, 29);
 			g.setColor(Colors.blue);
 			g.fillRect(52, stamStartY + 2, p.getRunStamina(), 25);
 			
 			// draw health bar
-			int hpStartY = 0;
-			if(drawMiniMap) {
-				hpStartY = 200;
-			} else {
-				hpStartY = 100;
-			}
+			int hpStartY = 75;
 			g.setColor(Colors.black);
 			g.fillRect(50, hpStartY, 204, 29);
 			g.setColor(Colors.green);
 			g.fillRect(52, hpStartY + 2, p.getHP(), 25);
 			
 			// draw power bar
-			int powStartY = 0;
-			if(drawMiniMap) {
-				powStartY = 250;
-			} else {
-				powStartY = 150;
-			}
+			int powStartY = 125;
 			g.setColor(Colors.black);
 			g.fillRect(50, powStartY, 204, 29);
 			g.setColor(Colors.red);
